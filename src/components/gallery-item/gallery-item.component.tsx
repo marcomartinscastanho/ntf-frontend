@@ -10,15 +10,13 @@ type Props = {
   onToggleSelect: (tweetId: string, imageIndex: number) => void;
 };
 
-export const GalleryItem: FC<Props> = ({ tweetId, imageIndex, image, selected, onToggleSelect }) => {
-  return (
-    <div
-      className={`gallery-item-thumbnail-frame ${selected ? "selected" : ""}`}
-      onClick={() => onToggleSelect(tweetId, imageIndex)}
-    >
-      <img className="gallery-item-thumbnail" alt={`${tweetId}/${imageIndex}`} src={image} />
-    </div>
-  );
-};
+export const GalleryItem: FC<Props> = ({ tweetId, imageIndex, image, selected, onToggleSelect }) => (
+  <div
+    className={`gallery-item-thumbnail-frame ${selected ? "selected" : ""}`}
+    onClick={() => onToggleSelect(tweetId, imageIndex)}
+  >
+    <img className="gallery-item-thumbnail" alt={`${tweetId}/${imageIndex}`} src={image} />
+  </div>
+);
 
 export default GalleryItem;

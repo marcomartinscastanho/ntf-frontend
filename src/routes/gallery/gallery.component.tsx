@@ -21,7 +21,7 @@ export const Gallery = () => {
         //   set selectedTweet
         setSelectedTweetId(tweetId);
         //   set selectedImages all images
-        const nImagesInTweet = gallery.find((tweet) => tweet.id === tweetId)?.images.length;
+        const nImagesInTweet = gallery.find((tweet) => tweet.tweet_id === tweetId)?.images.length;
         if (nImagesInTweet) {
           setSelectedImages(Array.from(Array(nImagesInTweet).keys()));
         }
@@ -41,20 +41,20 @@ export const Gallery = () => {
     [selectedTweetId, selectedImages, gallery, setSelectedTweetId, setSelectedImages]
   );
 
-  const handleClickDeleteSelected = useCallback(() => {
-    setGallery((g) => {
-      const updatedGallery = g
-        .map((tweet) => ({
-          ...tweet,
-          images: tweet.images.filter((_, i) => !(tweet.id === selectedTweetId && selectedImages.includes(i))),
-        }))
-        .filter((tweet) => tweet.images.length > 0);
-      //   chrome.storage.local.set({ gallery: updatedGallery });
-      setSelectedTweetId(undefined);
-      setSelectedImages([]);
-      return updatedGallery;
-    });
-  }, [selectedTweetId, selectedImages, setSelectedTweetId, setSelectedImages]);
+  // const handleClickDeleteSelected = useCallback(() => {
+  //   setGallery((g) => {
+  //     const updatedGallery = g
+  //       .map((tweet) => ({
+  //         ...tweet,
+  //         images: tweet.images.filter((_, i) => !(tweet.id === selectedTweetId && selectedImages.includes(i))),
+  //       }))
+  //       .filter((tweet) => tweet.images.length > 0);
+  //     //   chrome.storage.local.set({ gallery: updatedGallery });
+  //     setSelectedTweetId(undefined);
+  //     setSelectedImages([]);
+  //     return updatedGallery;
+  //   });
+  // }, [selectedTweetId, selectedImages, setSelectedTweetId, setSelectedImages]);
 
   //   // get tweet gallery
   //   useEffect(() => {
@@ -86,10 +86,10 @@ export const Gallery = () => {
           .map((tweet) =>
             tweet.images.map((image, i) => (
               <GalleryItem
-                tweetId={tweet.id}
+                tweetId={tweet.tweet_id}
                 imageIndex={i}
                 image={image.thumb}
-                selected={selectedTweetId === tweet.id && selectedImages.includes(i)}
+                selected={selectedTweetId === tweet.tweet_id && selectedImages.includes(i)}
                 onToggleSelect={handleSelectImage}
               />
             ))
@@ -97,10 +97,10 @@ export const Gallery = () => {
       </ul>
       {!!selectedTweetId && selectedImages.length > 0 && (
         <div className="gallery-buttons-container">
-          <button className="gallery-button gallery-button-delete" onClick={handleClickDeleteSelected}>
+          {/* <button className="gallery-button gallery-button-delete" onClick={handleClickDeleteSelected}>
             D
-          </button>
-          <Link to={`/post/${selectedTweetId.split("/").pop()}/?images=${selectedImages.join(",")}`}>
+          </button> */}
+          <Link to={`/post/${selectedTweetId}/?images=${selectedImages.join(",")}`}>
             <button className="gallery-button gallery-button-post">P</button>
           </Link>
         </div>
