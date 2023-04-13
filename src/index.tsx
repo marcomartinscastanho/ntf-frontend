@@ -4,7 +4,7 @@ import App from "./App";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { SessionProvider } from "./contexts/session.context";
 import { Gallery } from "./routes/gallery/gallery.component";
-// import { Post, loader as postLoader } from "./routes/post/post.component";
+import { Post } from "./routes/post/post.component";
 import { Auth, action as authAction } from "./routes/auth/auth.component";
 
 import "./index.css";
@@ -23,11 +23,10 @@ const router = createBrowserRouter([
         path: "gallery",
         element: <Gallery />,
       },
-      // {
-      //   path: "post/:tweetId/",
-      //   loader: postLoader,
-      //   element: <Post />,
-      // },
+      {
+        path: "post/:tweetId/",
+        element: <Post />,
+      },
     ],
   },
 ]);

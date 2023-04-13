@@ -21,9 +21,9 @@ export const Gallery = () => {
         //   set selectedTweet
         setSelectedTweetId(tweetId);
         //   set selectedImages all images
-        const nImagesInTweet = gallery.find((tweet) => tweet.tweet_id === tweetId)?.images.length;
-        if (nImagesInTweet) {
-          setSelectedImages(Array.from(Array(nImagesInTweet).keys()));
+        const tweet = gallery.find((tweet) => tweet.id === tweetId);
+        if (tweet) {
+          setSelectedImages(tweet.images.map((img) => img.position));
         }
       } else {
         if (selectedImages.includes(imageIx)) {
@@ -56,26 +56,14 @@ export const Gallery = () => {
   //   });
   // }, [selectedTweetId, selectedImages, setSelectedTweetId, setSelectedImages]);
 
-  //   // get tweet gallery
-  //   useEffect(() => {
-  //     chrome.storage.local.get("gallery").then((storage) => {
-  //       const g: Tweet[] = storage.gallery;
-  //       if (g) {
-  //         setGallery(g);
-  //       }
-  //     });
-  //   }, []);
-
   useEffect(() => {
-    if (backendAccessToken) {
-      getGallery(backendAccessToken)
-        .then(setGallery)
-        .catch(() => {
-          clearBackendAccessToken();
-          clearBackendRefreshToken();
-          navigate("/");
-        });
-    }
+    getGallery()
+      .then(setGallery)
+      .catch(() => {
+        clearBackendAccessToken();
+        clearBackendRefreshToken();
+        navigate("/");
+      });
   }, [backendAccessToken, clearBackendAccessToken, clearBackendRefreshToken, navigate]);
 
   return (
@@ -84,12 +72,12 @@ export const Gallery = () => {
         {[...gallery]
           .reverse()
           .map((tweet) =>
-            tweet.images.map((image, i) => (
+            tweet.images.map((image) => (
               <GalleryItem
-                tweetId={tweet.tweet_id}
-                imageIndex={i}
+                tweetId={tweet.id}
+                imageIndex={image.position}
                 image={image.thumb}
-                selected={selectedTweetId === tweet.tweet_id && selectedImages.includes(i)}
+                selected={selectedTweetId === tweet.id && selectedImages.includes(image.position)}
                 onToggleSelect={handleSelectImage}
               />
             ))

@@ -17,7 +17,7 @@ export const LocalStorage = {
     localStorage.removeItem(key);
   },
   init() {
-    ["projectsLimit", "discussionsLimit", "peopleLimit", "communityOpts", "challengeOpts"].forEach(this.remove);
+    [].forEach(this.remove);
   },
 };
 
