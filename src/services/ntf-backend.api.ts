@@ -1,3 +1,5 @@
+import { Tweet } from "../types";
+
 export const login = async (username: string, password: string) => {
   const url = "http://127.0.0.1:8000/api/token/";
   const headers = {
@@ -20,4 +22,18 @@ export const login = async (username: string, password: string) => {
   console.log("access", access);
   console.log("refresh", refresh);
   return [access, refresh];
+};
+
+export const getGallery = async (accessToken: string): Promise<Tweet[]> => {
+  const url = "http://127.0.0.1:8000/tweets/";
+  const headers = {
+    Authorization: `Bearer ${accessToken}`,
+  };
+  const response = await fetch(url, { headers });
+  const responseBody = await response.json();
+
+  if (response.status === 200) {
+    return responseBody;
+  }
+  return Promise.reject(responseBody);
 };

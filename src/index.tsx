@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { SessionProvider } from "./contexts/session.context";
-// import { Gallery } from "./routes/gallery/gallery.component";
+import { Gallery } from "./routes/gallery/gallery.component";
 // import { Post, loader as postLoader } from "./routes/post/post.component";
 import { Auth, action as authAction } from "./routes/auth/auth.component";
 
@@ -19,10 +19,10 @@ const router = createBrowserRouter([
         element: <Auth />,
         action: authAction,
       },
-      // {
-      //   path: "gallery",
-      //   element: <Gallery />,
-      // },
+      {
+        path: "gallery",
+        element: <Gallery />,
+      },
       // {
       //   path: "post/:tweetId/",
       //   loader: postLoader,

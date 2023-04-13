@@ -10,17 +10,15 @@ export const action: ActionFunction = async ({ request }) => {
   const username = formData.get("username");
   const password = formData.get("password");
   if (typeof username === "string" && typeof password === "string") {
-    // console.log("username", username);
-    // console.log("password", password);
     const [backendAccessToken, backendRefreshToken] = await login(username, password);
-    // await login to NT
+    // TODO: await login to NT
     return { backendAccessToken, backendRefreshToken /** ntToken */ };
   }
 };
 
 export const Auth = () => {
   const {
-    ntToken,
+    // ntToken,
     backendAccessToken,
     backendRefreshToken,
     setNtToken,
@@ -46,7 +44,7 @@ export const Auth = () => {
   }, [actionData?.backendRefreshToken, setBackendRefreshToken]);
 
   // if the tokens are stored in the local storage
-  if (!!ntToken && !!backendAccessToken && !!backendRefreshToken) {
+  if (/*!!ntToken && */ !!backendAccessToken && !!backendRefreshToken) {
     return <Navigate to="/gallery" />;
   }
 
