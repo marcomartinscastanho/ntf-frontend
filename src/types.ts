@@ -1,4 +1,5 @@
 export type TweetImage = {
+  id: string;
   position: number;
   name: string;
   thumb: string;
@@ -13,6 +14,12 @@ export type Blog = {
 export type Tag = {
   name: string;
   genres: string[];
+  num_posts: number;
+};
+
+export type TagOption = {
+  name: string;
+  num_posts: number;
 };
 
 export type Tweet = {

@@ -66,3 +66,34 @@
   background-color: #e01673;
   cursor: pointer;
 }
+
+.posting-spinner-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 300px;
+  height: 300px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 10;
+
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 1rem;
+  padding: 2rem;
+
+  color: black;
+}
+
+.posting-stage {
+  color: #733277;
+}
+.posting-stage.posting-success {
+  color: #dc5ee5;
+  font-weight: bold;
+}

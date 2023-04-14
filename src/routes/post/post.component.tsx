@@ -3,16 +3,16 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Hearts } from "react-loader-spinner";
 import { DangerousHtml } from "../../utils/dangerous-html.utils";
 import { BlogInput } from "../../components/input/blog-input/blog-input.component";
+import { HashtagInput } from "../../components/input/hashtag-input/hashtag-input.component";
 import { RatingInput } from "../../components/input/rating-input/rating-input.component";
 import { TextAreaInput } from "../../components/input/textarea-input/textarea-input.component";
 import { TextInput } from "../../components/input/text-input/text-input.component";
-import { Blog, buildTweet, OptionType, Rating, ratingCode, Tag, Tweet } from "../../types";
+import { Blog, buildTweet, OptionType, Rating, Tag, TagOption, Tweet } from "../../types";
 import { useSession } from "../../contexts/session.context";
-import { getTweet, getBlogs, getTags } from "../../services/ntf-backend.api";
+import { getTweet, getBlogs, getTags, savePost } from "../../services/ntf-backend.api";
 import { cleanTweetText } from "../../utils/clean-text";
 
 import "./post.styles.css";
-import HashtagInput from "../../components/input/hashtag-input/hashtag-input.component";
 
 type PostRouteParams = {
   tweetId: string;
@@ -20,21 +20,27 @@ type PostRouteParams = {
 
 const blogToOpt = (b: Blog): OptionType => ({ value: b.id, label: b.name });
 
-const tagsToOpts = (tags: Tag[]): string[] => {
-  return tags.reduce((opts, tag) => {
-    return [...opts, ...tag.genres.map((genre) => `${genre} • ${tag.name}`)] as string[];
-  }, [] as string[]);
+const tagsToOpts = (tags: Tag[]): TagOption[] => {
+  return tags
+    .reduce((opts, tag) => {
+      return [
+        ...opts,
+        ...tag.genres.map((genre) => {
+          const fullGenreObject = tags.find((t) => t.name === genre);
+          const genrePosts = fullGenreObject ? fullGenreObject.num_posts : 0;
+          return { name: `${genre} • ${tag.name}`, num_posts: tag.num_posts + genrePosts };
+        }),
+      ] as TagOption[];
+    }, [] as TagOption[])
+    .sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0))
+    .sort((a, b) => b.num_posts - a.num_posts);
 };
 
 export const Post = () => {
   const { tweetId } = useParams<PostRouteParams>();
-
   const [searchParams] = useSearchParams();
   const { clearBackendAccessToken, clearBackendRefreshToken } = useSession();
   const navigate = useNavigate();
-
-  // images here
-  //   console.log("searchParams", searchParams.get("images")?.split(","));
   const [tweet, setTweet] = useState<Tweet>(buildTweet());
   const [blogOptions, setBlogOptions] = useState<Blog[]>([]);
   const [tagOptions, setTagOptions] = useState<Tag[]>([]);
@@ -45,16 +51,29 @@ export const Post = () => {
   const [blog, setBlog] = useState<Blog>();
   const [isPosting, setIsPosting] = useState(false);
 
-  const post = async (queue?: boolean) => {
-    if (!rating) {
-      alert("Select a rating");
-      return;
-    }
-
+  const post = async (queue: boolean = true) => {
     if (!blog) {
       alert("Select a blog");
       return;
     }
+
+    setIsPosting(true);
+    // this is so that we see the spinner for at least 1 second
+    Promise.all([
+      new Promise((r) => setTimeout(r, 1000)),
+      savePost(
+        queue,
+        tweet.id,
+        comment,
+        hashtags,
+        source,
+        rating,
+        blog.id,
+        tweet.images.map((img) => img.id)
+      ),
+    ])
+      .then(() => navigate(-1))
+      .finally(() => setIsPosting(false));
   };
 
   const handleChangeComment = (e: ChangeEvent<HTMLTextAreaElement>) => setComment(e.target.value);
@@ -82,7 +101,7 @@ export const Post = () => {
   const handlePost = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("POST");
-    await post();
+    await post(false);
   };
 
   useEffect(() => {
@@ -125,7 +144,6 @@ export const Post = () => {
             wrapperClass=""
             visible={true}
           />
-          {/* <span className={`posting-stage ${postingStage === "SUCCESS" ? "posting-success" : ""}`}>{postingStage}</span> */}
         </div>
       )}
       <ul className="post-images-container">

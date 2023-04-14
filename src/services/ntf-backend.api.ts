@@ -1,4 +1,4 @@
-import { Blog, Tag, Tweet } from "../types";
+import { Blog, Rating, Tag, Tweet } from "../types";
 import { LocalStorage } from "./LocalStorage";
 
 const accessTtoken = () => {
@@ -100,4 +100,44 @@ export const getTags = async (): Promise<Tag[]> => {
     return responseBody;
   }
   return Promise.reject(responseBody);
+};
+
+export const savePost = async (
+  queue: boolean = true,
+  tweetId: string,
+  comment: string,
+  hashtags: string[],
+  source: string,
+  rating: Rating,
+  blog: string,
+  images: string[]
+) => {
+  const token = accessTtoken();
+  if (!token) {
+    Promise.reject("no access token in storage");
+  }
+  const url = "http://127.0.0.1:8000/posts/";
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+  const body = {
+    tweet: tweetId,
+    comment,
+    tags: hashtags,
+    source,
+    rating,
+    blog,
+    queue,
+    images,
+  };
+  const response = await fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(body),
+  });
+
+  // TODO: every api call must have a check if it worked, and if not, clear the session token and redirect to "/"
+  const respBody = await response.json();
+  console.log("respBody", respBody);
 };

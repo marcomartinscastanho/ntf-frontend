@@ -53,3 +53,7 @@
   background-color: #f91880;
   color: white;
 }
+
+.gallery-button.gallery-button-post:hover {
+  background-color: #e01673;
+}

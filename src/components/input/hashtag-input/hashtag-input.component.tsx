@@ -2,11 +2,12 @@ import React, { ChangeEvent, FC, KeyboardEvent, MouseEvent, useCallback, useEffe
 
 import "./hashtag-input.styles.css";
 import { CloseCrossIcon } from "./components/close-cross.component";
+import { TagOption } from "../../../types";
 
 type Props = {
   defaultValue?: string[];
   placeholder?: string;
-  options: string[];
+  options: TagOption[];
   onChange: (selected: string[]) => void;
 };
 
@@ -73,10 +74,13 @@ export const HashtagInput: FC<Props> = ({ defaultValue, options, placeholder, on
         {/** options-menu */}
         <div className="hashtag-options-container">
           {options
-            .filter((optionCouple) => !optionCouple.split(" • ").every((option) => selectedOptions.includes(option)))
+            .filter(
+              (optionCouple) => !optionCouple.name.split(" • ").every((option) => selectedOptions.includes(option))
+            )
             .map((option) => (
-              <div className="hashtag-option-item" key={option} onClick={() => handleTagOptionClick(option)}>
-                {option}
+              <div className="hashtag-option-item" key={option.name} onClick={() => handleTagOptionClick(option.name)}>
+                <span className="hashtag-option-item-name">{option.name}</span> •{" "}
+                <span className="hashtag-option-item-number">{option.num_posts}</span>
               </div>
             ))}
         </div>
