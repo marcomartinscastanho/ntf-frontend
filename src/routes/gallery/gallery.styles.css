@@ -41,11 +41,15 @@
 }
 
 .gallery-button.gallery-button-delete {
-  background-color: orangered;
-  color: white;
+  width: 3rem;
+  height: 3rem;
+  font-size: x-large;
+
+  background-color: white;
+  color: #f91880;
 }
 
 .gallery-button.gallery-button-post {
-  background-color: greenyellow;
-  color: darkgreen;
+  background-color: #f91880;
+  color: white;
 }

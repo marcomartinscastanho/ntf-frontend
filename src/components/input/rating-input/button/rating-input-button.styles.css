@@ -1,0 +1,21 @@
+.rating-input-button {
+  border: none;
+  background-color: #f91880;
+  color: white;
+  font-size: x-large;
+  padding: 0.5rem;
+  height: 3rem;
+  width: 3rem;
+  border-radius: 1rem;
+}
+
+.rating-input-button:hover {
+  background-color: #e01673;
+  cursor: pointer;
+}
+
+.rating-input-button:disabled {
+  color: #e01673;
+  background-color: white;
+  cursor: pointer;
+}

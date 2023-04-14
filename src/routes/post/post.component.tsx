@@ -1,6 +1,7 @@
 import React, { ChangeEvent, FormEvent, MouseEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Hearts } from "react-loader-spinner";
+import { DangerousHtml } from "../../utils/dangerous-html.utils";
 import { BlogInput } from "../../components/input/blog-input/blog-input.component";
 import { RatingInput } from "../../components/input/rating-input/rating-input.component";
 import { TextAreaInput } from "../../components/input/textarea-input/textarea-input.component";
@@ -8,19 +9,8 @@ import { TextInput } from "../../components/input/text-input/text-input.componen
 import { HashtagInput } from "../../components/input/hashtag-input/hashtag-input.component";
 import { Blog, buildTweet, GroupType, OptionType, Rating, ratingCode, Tag, Tweet } from "../../types";
 import { useSession } from "../../contexts/session.context";
-// import {
-//   getPostCompose,
-//   setPostComplete,
-//   setPostCompose,
-//   setPostOptions,
-//   setPostPartInsert,
-//   setPostPartUpdate,
-//   setPostPartUpdateComment,
-//   setPostPublish,
-//   setPostQueue,
-//   upload,
-// } from "../../services/api";
 import { getTweet, getBlogs, getTags } from "../../services/ntf-backend.api";
+import { cleanTweetText } from "../../utils/clean-text";
 
 import "./post.styles.css";
 
@@ -36,9 +26,10 @@ const srcToOpts = (src?: string): OptionType[] => {
   return poster ? [{ value: poster, label: poster }] : [];
 };
 
+const blogToOpt = (b: Blog): OptionType => ({ value: b.id, label: b.name });
+
 export const Post = () => {
   const { tweetId } = useParams<PostRouteParams>();
-  console.log("id", tweetId);
 
   const [searchParams] = useSearchParams();
   const { clearBackendAccessToken, clearBackendRefreshToken } = useSession();
@@ -141,12 +132,12 @@ export const Post = () => {
       )}
       <ul className="post-images-container">
         {tweet.images.map((image, i) => (
-          <li className="post-image-frame">
+          <li className="post-image-frame" key={image.position}>
             <img className="post-image-thumbnail" alt={`${tweet.id}/${i}`} src={image.thumb} />
           </li>
         ))}
       </ul>
-      {tweet.text && <p className="post-tweet-text">{tweet.text}</p>}
+      {tweet.text && <DangerousHtml as="p" className="post" _html={cleanTweetText(tweet.text)} />}
       <form className="post-form-container" onSubmit={handlePost}>
         <TextAreaInput label="Comment" value={comment} onChange={handleChangeComment} />
         {/* <HashtagInput
@@ -162,10 +153,8 @@ export const Post = () => {
         <TextInput label="Source" value={source} onChange={handleChangeSource} />
         <RatingInput label="Rating" value={rating} onChange={handleChangeRating} />
         <BlogInput
-          options={blogOptions.map(({ id, name }) => ({
-            value: id,
-            label: name,
-          }))}
+          options={blogOptions.map(blogToOpt)}
+          value={blog ? blogToOpt(blog) : undefined}
           onChange={handleChangeBlog}
         />
         <div className="post-form-buttons-container">

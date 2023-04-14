@@ -12,15 +12,17 @@ type Props = {
 
 export const RatingInput: FC<Props> = ({ label, value, onChange }) => {
   return (
-    <label className="post-form-label">
-      <span>{label}</span>
-      <div className="rating-input-buttons">
+    <>
+      <label className="post-form-label" htmlFor="rating-input">
+        <span>{label}</span>
+      </label>
+      <div id="rating-input" className="rating-input-buttons">
         <RatingInputButton rating={Rating.F} selected={value === Rating.F} onClick={onChange} />
         <RatingInputButton rating={Rating.O} selected={value === Rating.O} onClick={onChange} />
         <RatingInputButton rating={Rating.M} selected={value === Rating.M} onClick={onChange} />
         <RatingInputButton rating={Rating.X} selected={value === Rating.X} onClick={onChange} />
       </div>
-    </label>
+    </>
   );
 };
 

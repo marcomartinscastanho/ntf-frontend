@@ -5,24 +5,24 @@
   align-items: center;
   height: 100vh;
   overflow: hidden;
-  background-color: #282c34;
+  background-color: #15202b;
 }
 
 .navigation-bar {
-  background-color: #282c34;
-  max-width: 1200px;
+  background-color: #15202b;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: xx-large;
   color: white;
+  border-bottom: 1px solid gray;
   box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
 .App-body {
-  background-color: #282c34;
+  background-color: #15202b;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,6 +30,7 @@
   color: white;
   overflow-y: scroll;
   max-width: 1200px;
+  width: 100%;
 }
 
 .App-body::-webkit-scrollbar {
@@ -37,6 +38,7 @@
 }
 
 .navigation-menu {
+  max-width: 1200px;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -49,7 +51,14 @@
 }
 
 .navigation-link {
+  padding: 0.5rem 1rem;
   text-decoration: none;
   color: white;
   font-weight: bold;
+}
+
+.navigation-link:hover {
+  text-decoration: none;
+  color: white;
+  background-color: rgb(249, 247, 247, 0.1);
 }

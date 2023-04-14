@@ -1,6 +1,13 @@
-post-form-label {
+.post-form-label {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
   text-align: start;
+}
+
+.post-form-input {
+  font-size: large;
+  font-family: "Syne";
+  padding: 0.5rem;
+  border-radius: 0.5rem;
 }

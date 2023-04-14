@@ -1,6 +1,6 @@
 .rating-input-buttons {
   display: flex;
   flex-direction: row;
-  gap: 0.5rem;
+  gap: 1rem;
   margin: auto;
 }

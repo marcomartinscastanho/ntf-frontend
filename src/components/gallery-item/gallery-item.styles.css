@@ -13,6 +13,6 @@
 }
 
 .selected {
-  outline: 4px solid orange;
+  outline: 4px solid #f91880;
   outline-offset: -4px;
 }

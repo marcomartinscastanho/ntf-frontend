@@ -1,6 +1,8 @@
 import React, { FC } from "react";
 import { Rating } from "../../../../types";
 
+import "./rating-input-button.styles.css";
+
 type Props = {
   rating: Rating;
   selected: boolean;

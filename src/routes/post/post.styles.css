@@ -1,9 +1,11 @@
 .post-container {
   display: flex;
   flex-direction: column;
-  margin: 1rem 8rem;
+  width: 90%;
+  margin: 1rem;
   border: 2px solid white;
   border-radius: 0.5rem;
+  padding: 2rem;
 }
 
 .post-images-container {
@@ -19,8 +21,6 @@
 }
 
 .post-image-frame {
-  width: 24rem;
-  height: 24rem;
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -41,8 +41,8 @@
 .post-form-container {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin: 1rem 2rem;
+  gap: 1rem;
+  margin: 1rem 0;
   min-width: 16rem;
 }
 
@@ -50,6 +50,19 @@
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-
   margin: 2rem 0;
+}
+
+.post-form-buttons-container button {
+  border: none;
+  background-color: #f91880;
+  color: white;
+  font-size: xx-large;
+  padding: 1rem 5rem;
+  border-radius: 5rem;
+}
+
+.post-form-buttons-container button:hover {
+  background-color: #e01673;
+  cursor: pointer;
 }
