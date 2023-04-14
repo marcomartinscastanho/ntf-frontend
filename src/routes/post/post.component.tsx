@@ -6,27 +6,25 @@ import { BlogInput } from "../../components/input/blog-input/blog-input.componen
 import { RatingInput } from "../../components/input/rating-input/rating-input.component";
 import { TextAreaInput } from "../../components/input/textarea-input/textarea-input.component";
 import { TextInput } from "../../components/input/text-input/text-input.component";
-import { HashtagInput } from "../../components/input/hashtag-input/hashtag-input.component";
-import { Blog, buildTweet, GroupType, OptionType, Rating, ratingCode, Tag, Tweet } from "../../types";
+import { Blog, buildTweet, OptionType, Rating, ratingCode, Tag, Tweet } from "../../types";
 import { useSession } from "../../contexts/session.context";
 import { getTweet, getBlogs, getTags } from "../../services/ntf-backend.api";
 import { cleanTweetText } from "../../utils/clean-text";
 
 import "./post.styles.css";
+import HashtagInput from "../../components/input/hashtag-input/hashtag-input.component";
 
 type PostRouteParams = {
   tweetId: string;
 };
 
-const srcToOpts = (src?: string): OptionType[] => {
-  if (!src) {
-    return [];
-  }
-  const poster = src.split("/").pop();
-  return poster ? [{ value: poster, label: poster }] : [];
-};
-
 const blogToOpt = (b: Blog): OptionType => ({ value: b.id, label: b.name });
+
+const tagsToOpts = (tags: Tag[]): string[] => {
+  return tags.reduce((opts, tag) => {
+    return [...opts, ...tag.genres.map((genre) => `${genre} • ${tag.name}`)] as string[];
+  }, [] as string[]);
+};
 
 export const Post = () => {
   const { tweetId } = useParams<PostRouteParams>();
@@ -41,7 +39,7 @@ export const Post = () => {
   const [blogOptions, setBlogOptions] = useState<Blog[]>([]);
   const [tagOptions, setTagOptions] = useState<Tag[]>([]);
   const [comment, setComment] = useState("");
-  const [hashtags, setHashTags] = useState("");
+  const [hashtags, setHashTags] = useState<string[]>([]);
   const [source, setSource] = useState("");
   const [rating, setRating] = useState<Rating>(Rating.M);
   const [blog, setBlog] = useState<Blog>();
@@ -140,16 +138,11 @@ export const Post = () => {
       {tweet.text && <DangerousHtml as="p" className="post" _html={cleanTweetText(tweet.text)} />}
       <form className="post-form-container" onSubmit={handlePost}>
         <TextAreaInput label="Comment" value={comment} onChange={handleChangeComment} />
-        {/* <HashtagInput
-          placeholder="Select..."
-          defaultValue={srcToOpts(tweet.source)}
-          groupedOptions={Object.entries(genres).map<GroupType>(([genre, subgenres]) => ({
-            value: genre,
-            label: genre,
-            options: subgenres.map((subgenre) => ({ value: subgenre, label: subgenre })),
-          }))}
-          onChange={(values) => setHashTags(values.map((v) => `#${v.label}`).join(""))}
-        /> */}
+        <HashtagInput
+          defaultValue={tweet.author.length > 0 ? [tweet.author] : undefined}
+          options={tagsToOpts(tagOptions)}
+          onChange={setHashTags}
+        />
         <TextInput label="Source" value={source} onChange={handleChangeSource} />
         <RatingInput label="Rating" value={rating} onChange={handleChangeRating} />
         <BlogInput

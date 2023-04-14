@@ -25,11 +25,11 @@ export const BlogInput: FC<Props> = ({ options, value, onChange }) => {
     <label className="blog-input-container">
       <span className="blog-input-label">Blog</span>
       <select className="blog-input-select" value={value?.value} onChange={handleChange}>
-        <option value={undefined} disabled selected hidden>
+        <option value={undefined} disabled hidden>
           Choose a blog
         </option>
         {options.map((option) => (
-          <option className="blog-input-select-option" value={option.value}>
+          <option className="blog-input-select-option" key={option.value} value={option.value}>
             {option.label}
           </option>
         ))}

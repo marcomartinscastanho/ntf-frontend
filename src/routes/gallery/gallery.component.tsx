@@ -74,6 +74,7 @@ export const Gallery = () => {
           .map((tweet) =>
             tweet.images.map((image) => (
               <GalleryItem
+                key={`${tweet.id}-${image.position}`}
                 tweetId={tweet.id}
                 imageIndex={image.position}
                 image={image.thumb}

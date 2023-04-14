@@ -48,12 +48,6 @@ export const ratingCode = (r: Rating) => {
 
 export type OptionType = { value: string; label: string };
 
-export type GroupType = {
-  value: string;
-  label: string;
-  options: OptionType[];
-};
-
 // Skeleton object builders
 const tweetSkeleton: Tweet = {
   id: "",

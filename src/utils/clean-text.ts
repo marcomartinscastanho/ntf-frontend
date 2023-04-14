@@ -20,7 +20,6 @@ const cleanHashtags = (text: string): string => {
   let cleanText = text;
   let match: RegExpExecArray | null;
   while ((match = hashtagRegex.exec(cleanText)) !== null) {
-    console.log("match", match);
     const hashtag = `~~~${match[1]}`;
     const hashtagUrl = `https://twitter.com${match[2]}`;
     cleanText = cleanText.replace(
@@ -39,7 +38,6 @@ const cleanHandles = (text: string): string => {
   let cleanText = text;
   let match: RegExpExecArray | null;
   while ((match = hashtagRegex.exec(cleanText)) !== null) {
-    console.log("match", match);
     const handle = `~~~${match[1]}`;
     const handleUrl = `https://twitter.com${match[2]}`;
     cleanText = cleanText.replace(
@@ -58,7 +56,6 @@ const cleanLinks = (text: string): string => {
   let cleanText = text;
   let match: RegExpExecArray | null;
   while ((match = hashtagRegex.exec(cleanText)) !== null) {
-    console.log("match", match);
     const shortUrl = match[2];
     cleanText = cleanText.replace(
       match[0],
