@@ -1,5 +1,5 @@
 import { useState } from "react";
-import LocalStorage from "../services/LocalStorage";
+import { LocalStorage } from "../services/local-storage";
 
 export const usePersistState = <T>(storageKey: string, initialState?: T) => {
   const [state, setInternalState] = useState<T | undefined>(LocalStorage.get(storageKey) ?? initialState);

@@ -1,5 +1,5 @@
 import { Blog, Rating, Tag, Tweet } from "../types";
-import { LocalStorage } from "./LocalStorage";
+import { LocalStorage } from "./local-storage";
 
 const accessTtoken = () => {
   return LocalStorage.get("backendAccessToken");
