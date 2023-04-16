@@ -153,7 +153,7 @@ export const Post = () => {
           </li>
         ))}
       </ul>
-      {tweet.text && <DangerousHtml as="p" className="post" _html={cleanTweetText(tweet.text)} />}
+      {tweet.text && <DangerousHtml as="p" className="post-tweet-text" _html={cleanTweetText(tweet.text)} />}
       <form className="post-form-container" onSubmit={handlePost}>
         <TextAreaInput label="Comment" value={comment} onChange={handleChangeComment} />
         <HashtagInput
