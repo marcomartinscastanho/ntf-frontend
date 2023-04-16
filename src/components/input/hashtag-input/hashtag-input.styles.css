@@ -3,12 +3,18 @@
   flex-direction: column;
   gap: 0.5rem;
   text-align: left;
-  /* border: 1px solid #ccc; */
-  /* position: relative; */
-  /* border-radius: 0.5rem; */
-
   font-size: large;
   font-family: "Syne";
+}
+
+.hashtags-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: white;
+  color: #f91880;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
 }
 
 .hashtags-tags-container {
@@ -16,13 +22,6 @@
   flex-wrap: wrap;
   gap: 0.25rem;
   align-items: center;
-  /* justify-content: space-between; */
-  /* user-select: none; */
-  /* border: 2px solid white; */
-  background: white;
-  color: #f91880;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
 }
 
 .hashtags-tag-item {
@@ -76,7 +75,6 @@
 .custom-hashtag-container {
   display: flex;
   flex-direction: row;
-  /* margin: auto; */
   width: 100%;
   gap: 0.5rem;
 }
@@ -88,4 +86,5 @@
   font-family: "Syne";
   padding: 0.5rem;
   border-radius: 0.5rem;
+  border: none;
 }

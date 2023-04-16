@@ -71,7 +71,16 @@ export const HashtagInput: FC<Props> = ({ defaultValue, options, placeholder, on
       <span>{"Hashtags"}</span>
       <div className="hashtag-container">
         {/** hashtgs-input */}
-        <div className="hashtags-tags-container">{getDisplay()}</div>
+        <div className="hashtags-input-container">
+          <div className="hashtags-tags-container">{getDisplay()}</div>
+          <input
+            className="custom-hashtag-input"
+            placeholder="Search or create a new hashtag..."
+            value={customHashtag}
+            onChange={handleChangeCustomHashtag}
+            onKeyDown={addCustomHashtag}
+          />
+        </div>
         {/** options-menu */}
         <div className="hashtag-options-container">
           {options
@@ -88,14 +97,6 @@ export const HashtagInput: FC<Props> = ({ defaultValue, options, placeholder, on
               </div>
             ))}
         </div>
-        {/** custom-hashtag-input */}
-        <input
-          className="custom-hashtag-input"
-          placeholder="Search or create a new hashtag..."
-          value={customHashtag}
-          onChange={handleChangeCustomHashtag}
-          onKeyDown={addCustomHashtag}
-        />
       </div>
     </label>
   );
