@@ -33,6 +33,7 @@ export const HashtagInput: FC<Props> = ({ defaultValue, options, placeholder, on
     setSelectedOptions((selected) =>
       [...selected, ...option.split(" • ")].filter((o, i, self) => i === self.findIndex((t) => t === o))
     );
+    setCustomHashtag("");
   };
   const handleRemoveTagClick = (e: MouseEvent<HTMLSpanElement>, option: string) => {
     e.preventDefault();
@@ -77,6 +78,9 @@ export const HashtagInput: FC<Props> = ({ defaultValue, options, placeholder, on
             .filter(
               (optionCouple) => !optionCouple.name.split(" • ").every((option) => selectedOptions.includes(option))
             )
+            .filter((option) =>
+              !!customHashtag && customHashtag.length > 0 ? option.name.includes(customHashtag) : true
+            )
             .map((option) => (
               <div className="hashtag-option-item" key={option.name} onClick={() => handleTagOptionClick(option.name)}>
                 <span className="hashtag-option-item-name">{option.name}</span> •{" "}
@@ -87,7 +91,7 @@ export const HashtagInput: FC<Props> = ({ defaultValue, options, placeholder, on
         {/** custom-hashtag-input */}
         <input
           className="custom-hashtag-input"
-          placeholder="Create a custom hashtag..."
+          placeholder="Search or create a new hashtag..."
           value={customHashtag}
           onChange={handleChangeCustomHashtag}
           onKeyDown={addCustomHashtag}
