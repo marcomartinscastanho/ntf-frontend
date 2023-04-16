@@ -7,21 +7,12 @@
   font-family: "Syne";
 }
 
-.hashtags-input-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  background: white;
-  color: #f91880;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-}
-
 .hashtags-tags-container {
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem;
   align-items: center;
+  color: #f91880;
 }
 
 .hashtags-tag-item {
