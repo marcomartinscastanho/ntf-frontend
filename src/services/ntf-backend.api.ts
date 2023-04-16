@@ -19,13 +19,9 @@ export const login = async (username: string, password: string) => {
     headers: headers,
     body: JSON.stringify(body),
   });
-  // TODO: every api call must have a check if it worked, and if not, clear the session token and redirect to "/"
   const respBody = await response.json();
-  console.log("respBody", respBody);
   const access: string = respBody.access;
   const refresh: string = respBody.refresh;
-  console.log("access", access);
-  console.log("refresh", refresh);
   return [access, refresh];
 };
 
@@ -137,7 +133,24 @@ export const savePost = async (
     body: JSON.stringify(body),
   });
 
-  // TODO: every api call must have a check if it worked, and if not, clear the session token and redirect to "/"
   const respBody = await response.json();
   console.log("respBody", respBody);
+};
+
+export const deleteImage = async (id: string): Promise<void> => {
+  const token = accessTtoken();
+  if (!token) {
+    Promise.reject("no access token in storage");
+  }
+
+  const url = `http://127.0.0.1:8000/tweets/images/${id}/`;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  const response = await fetch(url, { method: "DELETE", headers });
+
+  if (response.status === 204) {
+    return Promise.resolve();
+  }
+  return Promise.reject(response.status);
 };

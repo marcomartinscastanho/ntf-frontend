@@ -2,7 +2,7 @@ import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GalleryItem } from "../../components/gallery-item/gallery-item.component";
 import { Tweet } from "../../types";
-import { getGallery } from "../../services/ntf-backend.api";
+import { deleteImage, getGallery } from "../../services/ntf-backend.api";
 import { useSession } from "../../contexts/session.context";
 
 import "./gallery.styles.css";
@@ -41,20 +41,27 @@ export const Gallery = () => {
     [selectedTweetId, selectedImages, gallery, setSelectedTweetId, setSelectedImages]
   );
 
-  // const handleClickDeleteSelected = useCallback(() => {
-  //   setGallery((g) => {
-  //     const updatedGallery = g
-  //       .map((tweet) => ({
-  //         ...tweet,
-  //         images: tweet.images.filter((_, i) => !(tweet.id === selectedTweetId && selectedImages.includes(i))),
-  //       }))
-  //       .filter((tweet) => tweet.images.length > 0);
-  //     //   chrome.storage.local.set({ gallery: updatedGallery });
-  //     setSelectedTweetId(undefined);
-  //     setSelectedImages([]);
-  //     return updatedGallery;
-  //   });
-  // }, [selectedTweetId, selectedImages, setSelectedTweetId, setSelectedImages]);
+  const handleClickDeleteSelected = useCallback(() => {
+    const images =
+      gallery
+        .find((tweet) => tweet.id === selectedTweetId)
+        ?.images.filter((img) => selectedImages.includes(img.position)) ?? [];
+
+    Promise.all(images.map((img) => img.id).map(deleteImage)).then(() => {
+      setSelectedTweetId(undefined);
+      setSelectedImages([]);
+      setGallery((tweets) =>
+        tweets
+          .map((tweet) => ({
+            ...tweet,
+            images: tweet.images.filter(
+              (image) => !(tweet.id === selectedTweetId && selectedImages.includes(image.position))
+            ),
+          }))
+          .filter((tweet) => tweet.images.length > 0)
+      );
+    });
+  }, [gallery, selectedImages, selectedTweetId]);
 
   useEffect(() => {
     getGallery()
@@ -84,9 +91,9 @@ export const Gallery = () => {
       </ul>
       {!!selectedTweetId && selectedImages.length > 0 && (
         <div className="gallery-buttons-container">
-          {/* <button className="gallery-button gallery-button-delete" onClick={handleClickDeleteSelected}>
+          <button className="gallery-button gallery-button-delete" onClick={handleClickDeleteSelected}>
             D
-          </button> */}
+          </button>
           <Link to={`/post/${selectedTweetId}/?images=${selectedImages.join(",")}`}>
             <button className="gallery-button gallery-button-post">P</button>
           </Link>
