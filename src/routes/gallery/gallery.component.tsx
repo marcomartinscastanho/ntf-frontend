@@ -69,20 +69,18 @@ export const Gallery = () => {
   return (
     <Fragment>
       <ul className="gallery-items-container">
-        {[...gallery]
-          .reverse()
-          .map((tweet) =>
-            tweet.images.map((image) => (
-              <GalleryItem
-                key={`${tweet.id}-${image.position}`}
-                tweetId={tweet.id}
-                imageIndex={image.position}
-                image={image.thumb}
-                selected={selectedTweetId === tweet.id && selectedImages.includes(image.position)}
-                onToggleSelect={handleSelectImage}
-              />
-            ))
-          )}
+        {[...gallery].map((tweet) =>
+          tweet.images.map((image) => (
+            <GalleryItem
+              key={`${tweet.id}-${image.position}`}
+              tweetId={tweet.id}
+              imageIndex={image.position}
+              image={image.thumb}
+              selected={selectedTweetId === tweet.id && selectedImages.includes(image.position)}
+              onToggleSelect={handleSelectImage}
+            />
+          ))
+        )}
       </ul>
       {!!selectedTweetId && selectedImages.length > 0 && (
         <div className="gallery-buttons-container">
