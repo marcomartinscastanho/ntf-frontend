@@ -1,12 +1,12 @@
 # ntf-frontend
 
-The frontend of the Twitter Image Scraper project.  
+The frontend of the [Twitter Image Scraper](https://github.com/marcomartinscastanho/twitter-image-scraper) project.  
 It displays the gallery of saved images.
 
 It was once possible to publish selected images to an external blog, but that's no longer possible.  
 Still, the code to do that was kept for purposes of future consultation.
 
-The purpose of this project was simply to learn and practice useful technologies.
+The purpose of this project was to learn and practice useful technologies.
 
 ## Installing
 
