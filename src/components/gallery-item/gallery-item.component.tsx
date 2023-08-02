@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { ForwardedRef } from "react";
 
 import "./gallery-item.styles.css";
 
@@ -10,13 +10,22 @@ type Props = {
   onToggleSelect: (tweetId: string, imageIndex: number) => void;
 };
 
-export const GalleryItem: FC<Props> = ({ tweetId, imageIndex, image, selected, onToggleSelect }) => (
-  <div
-    className={`gallery-item-thumbnail-frame ${selected ? "selected" : ""}`}
-    onClick={() => onToggleSelect(tweetId, imageIndex)}
-  >
-    <img className="gallery-item-thumbnail" alt={`${tweetId}/${imageIndex}`} src={image} />
-  </div>
-);
+export function GalleryItemInner(
+  { tweetId, imageIndex, image, selected, onToggleSelect }: Props,
+  ref: ForwardedRef<HTMLDivElement>
+) {
+  return (
+    <div
+      className={`gallery-item-thumbnail-frame ${selected ? "selected" : ""}`}
+      ref={ref}
+      onClick={() => onToggleSelect(tweetId, imageIndex)}
+    >
+      <img className="gallery-item-thumbnail" alt={`${tweetId}/${imageIndex}`} src={image} />
+    </div>
+  );
+}
+
+export const GalleryItem = React.forwardRef<HTMLDivElement, Props>((props, ref) => GalleryItemInner(props, ref));
+GalleryItem.displayName = "Avatar";
 
 export default GalleryItem;

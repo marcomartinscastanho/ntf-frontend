@@ -12,6 +12,10 @@ import { useSession } from "../../contexts/session.context";
 import { getTweet, getBlogs, getTags, savePost } from "../../services/ntf-backend.api";
 import { cleanTweetText } from "../../utils/clean-text";
 
+// TODO: parse the name to form an hashtag
+// https://github.com/beaugunderson/emoji-aware this to remove emojis
+// combining split and onlyEmoji
+
 import "./post.styles.css";
 
 type PostRouteParams = {
@@ -60,7 +64,7 @@ export const Post = () => {
     setIsPosting(true);
     // this is so that we see the spinner for at least 1 second
     Promise.all([
-      new Promise((r) => setTimeout(r, 1000)),
+      new Promise((r) => setTimeout(r, 500)),
       savePost(
         queue,
         tweet.id,
@@ -72,7 +76,13 @@ export const Post = () => {
         tweet.images.map((img) => img.id)
       ),
     ])
-      .then(() => navigate(-1))
+      .then(([_, next]) => {
+        if (next) {
+          navigate("/gallery", { state: { next }, replace: true });
+        } else {
+          navigate(-1);
+        }
+      })
       .finally(() => setIsPosting(false));
   };
 
@@ -90,6 +100,7 @@ export const Post = () => {
   const handleCancel = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     return navigate(-1);
+    // return navigate("/gallery", { state: { id: 7, color: 'green' } });
   };
 
   const handleQueue = async (e: MouseEvent<HTMLButtonElement>) => {
@@ -149,7 +160,9 @@ export const Post = () => {
       <ul className="post-images-container">
         {tweet.images.map((image, i) => (
           <li className="post-image-frame" key={image.position}>
-            <img className="post-image-thumbnail" alt={`${tweet.id}/${i}`} src={image.thumb} />
+            <a target="_blank" rel="noopener noreferrer" href={image.large}>
+              <img className="post-image-thumbnail" alt={`${tweet.id}/${i}`} src={image.thumb} />
+            </a>
           </li>
         ))}
       </ul>

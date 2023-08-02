@@ -1,7 +1,7 @@
-import React, { Fragment, useCallback, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { Fragment, RefObject, createRef, useCallback, useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GalleryItem } from "../../components/gallery-item/gallery-item.component";
-import { Tweet } from "../../types";
+import { Tweet, TweetImage, isAfterPostStateValid } from "../../types";
 import { deleteImage, getGallery } from "../../services/ntf-backend.api";
 import { useSession } from "../../contexts/session.context";
 
@@ -9,22 +9,36 @@ import "./gallery.styles.css";
 
 export const Gallery = () => {
   const [gallery, setGallery] = useState<Tweet[]>([]);
-  const { backendAccessToken, clearBackendAccessToken, clearBackendRefreshToken } = useSession();
+  const { clearBackendAccessToken, clearBackendRefreshToken } = useSession();
   const [selectedTweetId, setSelectedTweetId] = useState<string>();
   const [selectedImages, setSelectedImages] = useState<number[]>([]);
   const navigate = useNavigate();
+  const { state: locationState } = useLocation();
+
+  const refs = gallery
+    .reduce((acc, tweet) => {
+      return [...acc, ...tweet.images];
+    }, [] as TweetImage[])
+    .reduce((acc, image) => {
+      acc[image.id] = createRef<HTMLDivElement>();
+      return acc;
+    }, {} as { [key: string]: RefObject<HTMLDivElement> });
+
+  const selectAllTweet = useCallback(
+    (tweetId: string) => {
+      setSelectedTweetId(tweetId);
+      const tweet = gallery.find((tweet) => tweet.id === tweetId);
+      if (tweet) {
+        setSelectedImages(tweet.images.map((img) => img.position));
+      }
+    },
+    [gallery]
+  );
 
   const handleSelectImage = useCallback(
     (tweetId: string, imageIx: number) => {
       if (tweetId !== selectedTweetId) {
-        // if tweetId different from selectedTweet
-        //   set selectedTweet
-        setSelectedTweetId(tweetId);
-        //   set selectedImages all images
-        const tweet = gallery.find((tweet) => tweet.id === tweetId);
-        if (tweet) {
-          setSelectedImages(tweet.images.map((img) => img.position));
-        }
+        selectAllTweet(tweetId);
       } else {
         if (selectedImages.includes(imageIx)) {
           // if this image was selected, deselect
@@ -38,7 +52,8 @@ export const Gallery = () => {
         }
       }
     },
-    [selectedTweetId, selectedImages, gallery, setSelectedTweetId, setSelectedImages]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [selectedImages, selectedTweetId]
   );
 
   const handleClickDeleteSelected = useCallback(() => {
@@ -71,7 +86,24 @@ export const Gallery = () => {
         clearBackendRefreshToken();
         navigate("/");
       });
-  }, [backendAccessToken, clearBackendAccessToken, clearBackendRefreshToken, navigate]);
+  }, [clearBackendAccessToken, clearBackendRefreshToken, navigate]);
+
+  useEffect(() => {
+    if (isAfterPostStateValid(locationState)) {
+      const { next: nextTweetId } = locationState;
+      const nextTweet = gallery.find((tweet) => tweet.id === nextTweetId);
+      const nextTweetLastImage = nextTweet?.images.at(-1);
+      if (nextTweetLastImage) {
+        const ref = refs[nextTweetLastImage.id];
+        ref.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+      selectAllTweet(nextTweetId);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gallery, locationState]);
 
   return (
     <Fragment>
@@ -80,6 +112,7 @@ export const Gallery = () => {
           tweet.images.map((image) => (
             <GalleryItem
               key={`${tweet.id}-${image.position}`}
+              ref={refs[image.id]}
               tweetId={tweet.id}
               imageIndex={image.position}
               image={image.thumb}

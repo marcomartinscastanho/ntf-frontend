@@ -134,7 +134,11 @@ export const savePost = async (
   });
 
   const respBody = await response.json();
-  console.log("respBody", respBody);
+  if ("next" in respBody) {
+    const next: string = respBody.next;
+    return next;
+  }
+  return undefined;
 };
 
 export const deleteImage = async (id: string): Promise<void> => {

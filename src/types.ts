@@ -65,3 +65,11 @@ const tweetSkeleton: Tweet = {
   url: "",
 };
 export const buildTweet = (): Tweet => tweetSkeleton;
+
+type AfterPostState = { next: string };
+export function isAfterPostStateValid(state: any): state is AfterPostState {
+  if (!state) return false;
+  if (typeof state !== "object") return false;
+  if (typeof state.next !== "string") return false;
+  return true;
+}
