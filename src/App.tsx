@@ -18,6 +18,11 @@ export const App = () => (
             Gallery
           </Link>
         </li>
+        <li>
+          <Link className="navigation-link" to={`show`}>
+            Show
+          </Link>
+        </li>
       </ul>
     </nav>
     {/* </header> */}

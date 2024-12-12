@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { SessionProvider } from "./contexts/session.context";
 import { Gallery } from "./routes/gallery/gallery.component";
 import { Post } from "./routes/post/post.component";
+import { Show } from "./routes/show/show.component";
 import { Auth, action as authAction } from "./routes/auth/auth.component";
 
 import "./index.css";
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "gallery",
         element: <Gallery />,
+      },
+      {
+        path: "show",
+        element: <Show />,
       },
       {
         path: "post/:tweetId/",

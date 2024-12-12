@@ -1,0 +1,13 @@
+.slideshow-container {
+  width: 100%; /* Or a fixed width if necessary */
+  max-width: 1200px; /* Match your layout constraints */
+  margin: auto; /* Center the container */
+  position: relative; /* Ensure proper positioning for arrows/dots */
+}
+
+.slideshow-item {
+  max-height: 95vh; /* Optional: Limit height to 90% of the viewport */
+  width: 100%; /* Let the image take up the full width of its container */
+  object-fit: contain; /* Maintain the aspect ratio while fitting the image */
+  max-width: 1200px; /* Match your layout constraints */
+}

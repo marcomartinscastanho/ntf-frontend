@@ -1,12 +1,17 @@
 import { Blog, Rating, Tag, Tweet } from "../types";
 import { LocalStorage } from "./local-storage";
 
+const API_BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://127.0.0.1:8000"
+    : `${window.location.protocol}//${window.location.hostname}:8000`;
+
 const accessTtoken = () => {
   return LocalStorage.get("backendAccessToken");
 };
 
 export const login = async (username: string, password: string) => {
-  const url = "http://127.0.0.1:8000/api/token/";
+  const url = API_BASE_URL + "/api/token/";
   const headers = {
     "Content-Type": "application/json",
   };
@@ -30,7 +35,7 @@ export const getGallery = async (): Promise<Tweet[]> => {
   if (!token) {
     Promise.reject("no access token in storage");
   }
-  const url = "http://127.0.0.1:8000/tweets/";
+  const url = API_BASE_URL + "/tweets/";
   const headers = {
     Authorization: `Bearer ${token}`,
   };
@@ -49,7 +54,7 @@ export const getTweet = async (id: string): Promise<Tweet> => {
     Promise.reject("no access token in storage");
   }
 
-  const url = `http://127.0.0.1:8000/tweets/${id}/`;
+  const url = API_BASE_URL + `/tweets/${id}/`;
   const headers = {
     Authorization: `Bearer ${token}`,
   };
@@ -67,7 +72,7 @@ export const getBlogs = async (): Promise<Blog[]> => {
   if (!token) {
     Promise.reject("no access token in storage");
   }
-  const url = "http://127.0.0.1:8000/options/blogs/";
+  const url = API_BASE_URL + "/options/blogs/";
   const headers = {
     Authorization: `Bearer ${token}`,
   };
@@ -85,7 +90,7 @@ export const getTags = async (): Promise<Tag[]> => {
   if (!token) {
     Promise.reject("no access token in storage");
   }
-  const url = "http://127.0.0.1:8000/options/tags/";
+  const url = API_BASE_URL + "/options/tags/";
   const headers = {
     Authorization: `Bearer ${token}`,
   };
@@ -112,7 +117,7 @@ export const savePost = async (
   if (!token) {
     Promise.reject("no access token in storage");
   }
-  const url = "http://127.0.0.1:8000/posts/";
+  const url = API_BASE_URL + "/posts/";
   const headers = {
     Authorization: `Bearer ${token}`,
     "Content-Type": "application/json",
@@ -147,7 +152,7 @@ export const deleteImage = async (id: string): Promise<void> => {
     Promise.reject("no access token in storage");
   }
 
-  const url = `http://127.0.0.1:8000/tweets/images/${id}/`;
+  const url = API_BASE_URL + `/tweets/images/${id}/`;
   const headers = {
     Authorization: `Bearer ${token}`,
   };
